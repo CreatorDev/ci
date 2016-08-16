@@ -1,0 +1,3 @@
+[submodule "openwrt"]
+	path = openwrt
+	url = https://github.com/Creatordev/openwrt.git
