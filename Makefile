@@ -11,6 +11,7 @@ clean: clean_openwrt clean_feeds clean_binaries
 
 # Building OpenWRT
 $(DIR__CI)/patched:
+	git submodule init openwrt;git submodule update; \
 	cd $(DIR__OPENWRT); \
 	./scripts/feeds update -a; \
 	./scripts/feeds install -a;
@@ -22,9 +23,7 @@ endif
 
 $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
-		cat $P > $(DIR__OPENWRT)/.config; \
-	else \
-		cat creator-kit-1-cascoda.config > $(DIR__OPENWRT)/.config; \
+		cat $(DIR__OPENWRT)/target/linux/pistachio/$P > $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
 	cp config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
