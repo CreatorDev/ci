@@ -1,10 +1,10 @@
 ##  CreatorDev OpenWrt CI Build system for build-all
 
-Creator-Kit requires multiple repositories for building, which are scattered across two GitHub organizations namely CreatorKit, Creatordev, FlowM2M and Cascoda.
+To host all the possible packages built for pistachio target, we need this build-all CI system.So that one can install the required package on the Ci40 without building it manually.
 
 ### Steps for triggering build-all release of CreatorDev/Openwrt are as follows :-
 
-Create a directory to clone this CI repository which has openwrt has submodule :-
+Create a directory to clone this CI repository which has openwrt as submodule :-
 
     $ mkdir openwrt-ci
     $ cd openwrt-ci
