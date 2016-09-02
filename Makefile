@@ -24,8 +24,8 @@ endif
 .PHONY: $(DIR__OPENWRT)/.config
 
 $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
-	if test $(findstring P=,$(MAKEFLAGS)) && test -f $(DIR__OPENWRT)/target/linux/pistachio/$P; then \
-		cat $(DIR__OPENWRT)/target/linux/pistachio/$P > $(DIR__OPENWRT)/.config; \
+	if test $(findstring P=,$(MAKEFLAGS)) && test -f $(DIR__CI)/$P; then \
+		cat $(DIR__CI)/$P > $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
 	cp $(DIR__CI)/config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
