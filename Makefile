@@ -7,14 +7,17 @@ all: openwrt
 openwrt: build_openwrt
 	echo "OpenWrt Done!"
 
-clean: clean_openwrt clean_feeds clean_binaries
+clean: clean_openwrt clean_feeds clean_binaries clean_keys
 
 # Building OpenWRT
 $(DIR__CI)/patched:
 	git submodule init openwrt;git submodule update --remote; \
 	cd $(DIR__OPENWRT); \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a;
+	./scripts/feeds install -a;\
+	/vault read -field=key secret/creator/packagesigning > key.pem; \
+	/vault read -field=cert secret/creator/packagesigning > cert.pem; \
+	/vault read -field=password secret/creator/packagesigning > pass.txt
 ifneq (_,_$(findstring all,$P))
 	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch;\
 	patch -p1 < $(DIR__CI)/0001-node-host-turn-off-verbose.patch;
@@ -66,4 +69,11 @@ clean_feeds: clean_patches
 .PHONY: clean_binaries
 clean_binaries:
 	rm -rf $(DIR__OPENWRT)/bin/pistachio/
+
+.PHONY: clean_keys
+clean_keys:
+	cd $(DIR__OPENWRT); \
+	rm -f key.pem; \
+	rm -f cert.pem; \
+	rm -f pass.txt;
 
