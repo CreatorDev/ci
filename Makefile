@@ -13,14 +13,15 @@ clean: clean_openwrt clean_feeds clean_binaries clean_keys
 $(DIR__CI)/patched:
 	git submodule init openwrt;git submodule update --remote; \
 	cd $(DIR__OPENWRT); \
+	if test $(findstring T=,$(MAKEFLAGS)); then git checkout $T; fi; \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a;\
+	./scripts/feeds install -a; \
 	/vault read -field=key secret/creator/packagesigning > key.pem; \
 	/vault read -field=cert secret/creator/packagesigning > cert.pem; \
 	/vault read -field=password secret/creator/packagesigning > pass.txt
 ifneq (_,_$(findstring all,$P))
-	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch;\
-	patch -p1 < $(DIR__CI)/0001-node-host-turn-off-verbose.patch;
+	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
+	patch -p1 < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
 	touch $(DIR__CI)/patched
 endif
 
@@ -29,6 +30,11 @@ endif
 $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $(DIR__CI)/$P; then \
 		cat $(DIR__CI)/$P > $(DIR__OPENWRT)/.config; \
+	else \
+		cat $(DIR__CI)/creator-platform-all-cascoda.config > $(DIR__OPENWRT)/.config; \
+	fi; \
+	if test $(findstring T=,$(MAKEFLAGS)); then \
+		sed -i 's|.*CONFIG_VERSION_NUMBER.*|CONFIG_VERSION_NUMBER="$T"|g' $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
 	cp $(DIR__CI)/config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
@@ -56,10 +62,10 @@ clean_openwrt:
 clean_patches:
 	if [ -f $(DIR__CI)/patched ]; then \
 		cd $(DIR__OPENWRT)/feeds/packages; patch -p1 -R < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
-		patch -p1 -R < $(DIR__CI)/0001-node-host-turn-off-verbose.patch;\
-		rm $(DIR__CI)/patched;\
+		patch -p1 -R < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
+		rm $(DIR__CI)/patched; \
 	else \
-		echo "You don't have patched feeds";\
+		echo "You don't have patched feeds"; \
 	fi
 
 .PHONY: clean_feeds
