@@ -20,3 +20,10 @@ For CC2520:
 
     $ make openwrt P=creator-platform-all.config V=s
 
+## To build specific tag release of openwrt with all userspace and kernelspace packages:
+
+    $ make openwrt T=<tag_version> P=creator-platform-all-cascoda.config V=s
+
+e.g.
+
+    $ make openwrt T=0.9.6 P=creator-platform-all-cascoda.config V=s
