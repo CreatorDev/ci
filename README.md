@@ -10,6 +10,16 @@ Create a directory to clone this CI repository which has openwrt as submodule :-
     $ cd openwrt-ci
     $ git clone https://github.com/Creatordev/ci.git --recursive
 
+## To build openwrt vanilla image:
+
+For CA8210:
+
+    $ make openwrt P=creator-platform-default-cascoda.config V=s
+
+For CC2520:
+
+    $ make openwrt P=creator-platform-default.config V=s
+
 ## To build openwrt with all userspace and kernelspace packages:
 
 For CA8210:
@@ -22,8 +32,10 @@ For CC2520:
 
 ## To build specific tag release of openwrt with all userspace and kernelspace packages:
 
-    $ make openwrt T=<tag_version> P=creator-platform-all-cascoda.config V=s
+    $ make openwrt T=<tag_version> P=<config_file> V=s
 
 e.g.
 
     $ make openwrt T=0.9.6 P=creator-platform-all-cascoda.config V=s
+
+    $ make openwrt T=0.9.6 P=creator-platform-default-cascoda.config V=s
