@@ -31,7 +31,7 @@ $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $(DIR__CI)/$P; then \
 		cat $(DIR__CI)/$P > $(DIR__OPENWRT)/.config; \
 	else \
-		cat $(DIR__CI)/creator-platform-all-cascoda.config > $(DIR__OPENWRT)/.config; \
+		cat $(DIR__CI)/creator-platform-default-cascoda.config > $(DIR__OPENWRT)/.config; \
 	fi; \
 	if test $(findstring T=,$(MAKEFLAGS)); then \
 		sed -i 's|.*CONFIG_VERSION_NUMBER.*|CONFIG_VERSION_NUMBER="$T"|g' $(DIR__OPENWRT)/.config; \
