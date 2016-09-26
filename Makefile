@@ -12,6 +12,7 @@ clean: clean_openwrt clean_feeds clean_binaries clean_keys
 # Building OpenWRT
 $(DIR__CI)/patched:
 	git submodule init openwrt;git submodule update --remote; \
+	cp $(DIR__CI)/feeds.conf.creator.ci $(DIR__OPENWRT)/feeds.conf; \
 	cd $(DIR__OPENWRT); \
 	if test $(findstring T=,$(MAKEFLAGS)); then git checkout $T; fi; \
 	./scripts/feeds update -a; \
