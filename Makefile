@@ -38,7 +38,7 @@ $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
 		sed -i 's|.*CONFIG_VERSION_NUMBER.*|CONFIG_VERSION_NUMBER="$T"|g' $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
-	cp $(DIR__CI)/config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
+	cp $(DIR__CI)/config-4.4-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.4
 endif
 	cd $(DIR__OPENWRT);$(MAKE) defconfig
 
