@@ -48,7 +48,7 @@ $(DIR__OPENWRT)/version:
 .PHONY: build_openwrt
 build_openwrt: $(DIR__OPENWRT)/.config $(DIR__OPENWRT)/version
 ifneq (_,_$(findstring all,$P))
-	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=1 -j$(J)
+	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=m -j$(J)
 else
 	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) -j$(J)
 endif
