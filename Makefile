@@ -23,6 +23,7 @@ $(DIR__CI)/patched:
 ifneq (_,_$(findstring all,$P))
 	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
 	patch -p1 < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
+	cd $(DIR__OPENWRT)/; patch -p1 < $(DIR__CI)/0001-package-Remove-zram-kernel-module.patch; \
 	touch $(DIR__CI)/patched
 endif
 
@@ -64,6 +65,7 @@ clean_patches:
 	if [ -f $(DIR__CI)/patched ]; then \
 		cd $(DIR__OPENWRT)/feeds/packages; patch -p1 -R < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
 		patch -p1 -R < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
+		cd $(DIR__OPENWRT)/; patch -p1 -R < $(DIR__CI)/0001-package-Remove-zram-kernel-module.patch; \
 		rm $(DIR__CI)/patched; \
 	else \
 		echo "You don't have patched feeds"; \
