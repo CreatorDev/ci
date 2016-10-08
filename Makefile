@@ -22,7 +22,7 @@ $(DIR__CI)/patched:
 	/vault read -field=password secret/creator/packagesigning > pass.txt
 ifneq (_,_$(findstring all,$P))
 	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
-	patch -p1 < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
+	cd $(DIR__OPENWRT)/; patch -p1 < $(DIR__CI)/0001-package-Remove-zram-kernel-module.patch; \
 	touch $(DIR__CI)/patched
 endif
 
@@ -38,7 +38,7 @@ $(DIR__OPENWRT)/.config: $(DIR__CI)/patched
 		sed -i 's|.*CONFIG_VERSION_NUMBER.*|CONFIG_VERSION_NUMBER="$T"|g' $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
-	cp $(DIR__CI)/config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
+	cp $(DIR__CI)/config-4.4-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.4
 endif
 	cd $(DIR__OPENWRT);$(MAKE) defconfig
 
@@ -48,7 +48,7 @@ $(DIR__OPENWRT)/version:
 .PHONY: build_openwrt
 build_openwrt: $(DIR__OPENWRT)/.config $(DIR__OPENWRT)/version
 ifneq (_,_$(findstring all,$P))
-	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=1 -j$(J)
+	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=m -j$(J)
 else
 	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) -j$(J)
 endif
@@ -63,7 +63,7 @@ clean_openwrt:
 clean_patches:
 	if [ -f $(DIR__CI)/patched ]; then \
 		cd $(DIR__OPENWRT)/feeds/packages; patch -p1 -R < $(DIR__CI)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
-		patch -p1 -R < $(DIR__CI)/0001-node-host-turn-off-verbose.patch; \
+		cd $(DIR__OPENWRT)/; patch -p1 -R < $(DIR__CI)/0001-package-Remove-zram-kernel-module.patch; \
 		rm $(DIR__CI)/patched; \
 	else \
 		echo "You don't have patched feeds"; \
