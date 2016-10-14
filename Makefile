@@ -17,6 +17,7 @@ $(DIR__CI)/patched:
 	if test $(findstring T=,$(MAKEFLAGS)); then git checkout $T; fi; \
 	./scripts/feeds update -a; \
 	./scripts/feeds install -a; \
+	/vault token-renew; \
 	/vault read -field=key secret/creator/packagesigning > key.pem; \
 	/vault read -field=cert secret/creator/packagesigning > cert.pem; \
 	/vault read -field=password secret/creator/packagesigning > pass.txt
