@@ -1,4 +1,4 @@
 [submodule "openwrt"]
 	path = openwrt
 	url = https://github.com/CreatorDev/openwrt.git
-	branch = creator
+	branch = ci40
